@@ -108,6 +108,7 @@ def write(line):
 def fillSymbol():
     pc = 0
     varRAM = 16
+    cout = "111a"
 
     archivo=open("Entrada.txt","r")
     lineas=archivo.readlines()
@@ -134,7 +135,11 @@ def fillSymbol():
                 else:
                     symbol[sym]=varRAM
                     varRAM=varRAM+1
-        pc=pc+1
+            pc = pc + 1
+
+
+
+
 
         if x.label:
             sym=x.pcLabel()
@@ -151,6 +156,7 @@ def fillSymbol():
 
 def read():
     pc = 0
+    cout="111a"
     archivo=open("Entrada.txt","r")
     for linea in l2:
         r=len(linea)
@@ -167,6 +173,30 @@ def read():
 
             else:
                 print(x.Aout,x.getIndex)
+        elif linea.find('=')!= -1:
+                sym=linea.split('=')
+                c =sym[1][:len(sym[1])-1]
+                #print(c)
+
+                if sym[1].find('M') !=-1:
+                    cout=cout.replace('a','1')
+                else:
+                    cout=cout.replace('a','0')
+
+                if c in comp:
+                    #print("comp ",comp[c])
+                    cout=cout+comp[c]
+                    #print("cadena ",cout)
+                #print(sym[0])
+                if sym[0] in dest:
+                    #print("destino ",dest[sym[0]])
+                    d= sym[0]
+                    cout=cout+dest[d]+"000"
+                    #print("cadena ",cout)
+                pc=pc+1
+                print(cout)
+                cout="111a"
+
 
         if x.getLabel:
             #print(x.pcLabel(),x.getIndex)
@@ -178,7 +208,67 @@ def read():
 varRAM=16
 l2 = []
 symbol={}
+comp={}
+dest={}
+jump={}
+
+#bit [12] on
+
+comp["0"]="101010"
+comp["1"]="111111"
+comp["-1"]="111010"
+comp["D"]="001100"
+comp["M"]="110000"
+comp["!D"]="001101"
+comp["!M"]="110001"
+comp["-D"]="001111"
+comp["-M"]="110011"
+comp["D+1"]="011111"
+comp["M+1"]="110111"
+comp["D-1"]="001110"
+comp["M-1"]="110010"
+comp["D+M"]="000010"
+comp["D-M"]="010011"
+comp["M-D"]="000111"
+comp["D&M"]="000000"
+comp["D|M"]="010101"
+
+#bit[12] off
+comp["A"]="110000"
+comp["!D"]="001101"
+comp["!A"]="110001"
+comp["-D"]="001111"
+comp["-A"]="110011"
+comp["D+1"]="011111"
+comp["A+1"]="110111"
+comp["D-1"]="001110"
+comp["A-1"]="110010"
+comp["D+A"]="000010"
+comp["D-A"]="010011"
+comp["A-D"]="000111"
+comp["D&A"]="000000"
+comp["D|A"]="010101"
+
+#dest [A,D,M,AD,AM,ADM,MD,null]
+dest["0"]="000"
+dest["M"]="001"
+dest["D"]="010"
+dest["MD"]="011"
+dest["A"]="100"
+dest["AM"]="101"
+dest["AD"]="110"
+dest["AMD"]="111"
+
+jump["null"]="000"
+jump["JGT"]="001"
+jump["JEQ"]="010"
+jump["JGE"]="011"
+jump["JLT"]="100"
+jump["JNE"]="101"
+jump["JLE"]="110"
+jump["JMP"]="111"
 fillSymbol()
+
 print(symbol)
 read()
 

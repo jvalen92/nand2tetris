@@ -1,11 +1,9 @@
-//holi soy un comentario
-
-
-
-@100
-@200
+@i
+M=1
+@sum
+M=0
 (LOOP)
 @i
-@loop
-@i
+D=M
+@R0
 @loop
